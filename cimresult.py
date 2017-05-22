@@ -16,6 +16,7 @@ for eachline in log_file_unit:
     result_file.write('SUBSYSTEM ' + str(sysnum.group(2)) + ': ' + 'E(CENTRAL)=' + str(energy) + '\n')
     total_energy = total_energy + energy
 
+
 result_file.write('Total Correlation Energy: ' + str(total_energy) + '\n')
 
 

@@ -20,4 +20,7 @@ for eachline in log_file_unit:
 result_file.write('Total Correlation Energy: ' + str(total_energy) + '\n')
 
 
+test
+
+
              

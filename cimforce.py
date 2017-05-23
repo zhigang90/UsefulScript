@@ -2,17 +2,13 @@
 import os, sys
 import re
 
-class atomforce:
-    def __intit__(self):
-        self
-
 total_energy = 0.0
 outfiles = 'grep "Atom  Name FullLabel" *Sys*out > outfiles.txt'
 os.system(outfiles)
 out_file_unit = open('outfiles.txt')
 result_file = open('finalforce.txt','w')
 
-
+# Get the number of atoms of the whole molecule
 for eachline in out_file_unit:
     name = eachline.split(':')[0]
     splitline = re.compile(r'(\w*)\_Sys-(\d*).out\S*')
@@ -22,11 +18,13 @@ for eachline in out_file_unit:
     output = open(moout)
     for line in output:
         if line[3:21] == 'Number of symmetry':
-            ntotatom = line.split(':')[1]
+            ntotatom = int(line.split(':')[1])
             break
     break
+out_file_unit.seek(0)
+
 force = {}
-for atom in range(0,ntotatom):
+for atom in range(1,ntotatom+1):
     force[atom]=[0,0,0]
 
 for eachline in out_file_unit:
@@ -36,28 +34,23 @@ for eachline in out_file_unit:
     outfile = open(name)
     find_start = 0
     force_get = 0
-    force = [] []
     for line in outfile:
         if line[3:21] == 'Number of symmetry':
-            natom = line.split(':')[1]
-
-        if line[1:12] == 'Atom  Name':
+            natom = int(line.split(':')[1])
+        if line[1:11] == 'Atom  Name':
             find_start = 1
             continue
         
         if find_start == 1: 
-           if line == '':
+           if line == '\n':
                continue
            else:
                force_get = force_get + 1
-               line.split()
+               atomlabel = int(line.split()[2])
+               for i in range(0,3):
+                   force[atomlabel][i] += float(line.split()[i+3])
+               if force_get == natom:
+                   break
 
-
-
-    energy = float(eachline.split()[2])
-    result_file.write('SUBSYSTEM ' + str(sysnum.group(2)) + ': ' + 'E(CENTRAL)=' + str(energy) + '\n')
-    total_energy = total_energy + energy
-result_file.write('Total Correlation Energy: ' + str(total_energy) + '\n')
-
-test
-             
+for i in range(1,ntotatom+1):
+    result_file.write(str('%4d'%i)+str('%11.7f'%(force[i][0])) +str('%11.7f'%(force[i][1]))+str('%11.7f'%(force[i][2])) +'\n')

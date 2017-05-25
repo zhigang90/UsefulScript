@@ -18,7 +18,7 @@ for eachline in out_file_unit:
     output = open(moout)
     for line in output:
         if line[3:21] == 'Number of symmetry':
-            ntotatom = int(line.split(':')[1])
+            ntotatom = int(line.splat(':')[1])
             break
     break
 out_file_unit.seek(0)

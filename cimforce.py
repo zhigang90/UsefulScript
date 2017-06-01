@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import os, sys
+import os
 import re
 
 total_energy = 0.0
@@ -18,7 +18,7 @@ for eachline in out_file_unit:
     output = open(moout)
     for line in output:
         if line[3:21] == 'Number of symmetry':
-            ntotatom = int(line.splat(':')[1])
+            ntotatom = int(line.split(':')[1])
             break
     break
 out_file_unit.seek(0)
@@ -52,5 +52,6 @@ for eachline in out_file_unit:
                if force_get == natom:
                    break
 
+result_file.write('Atom    force-x     force-y     force-z\n')
 for i in range(1,ntotatom+1):
-    result_file.write(str('%4d'%i)+str('%11.7f'%(force[i][0])) +str('%11.7f'%(force[i][1]))+str('%11.7f'%(force[i][2])) +'\n')
+    result_file.write(str('%4d'%i)+str('%12.7f'%(force[i][0])) +str('%12.7f'%(force[i][1]))+str('%12.7f'%(force[i][2])) +'\n')

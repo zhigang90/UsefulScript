@@ -17,5 +17,5 @@ for eachline in log_file_unit:
     total_energy = total_energy + energy
 result_file.write('Total Correlation Energy: ' + str(total_energy) + '\n')
 
-test
+#test
              

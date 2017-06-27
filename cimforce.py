@@ -3,7 +3,7 @@ import os
 import re
 
 total_energy = 0.0
-outfiles = 'grep "Atom  Name FullLabel" *Sys*out > outfiles.txt'
+outfiles = 'grep -m 1 "Atom  Name FullLabel" *Sys*out > outfiles.txt'
 os.system(outfiles)
 out_file_unit = open('outfiles.txt')
 result_file = open('finalforce.txt','w')
@@ -11,7 +11,7 @@ result_file = open('finalforce.txt','w')
 # Get the number of atoms of the whole molecule
 for eachline in out_file_unit:
     name = eachline.split(':')[0]
-    splitline = re.compile(r'(\w*)\_Sys-(\d*).out\S*')
+    splitline = re.compile(r'(.*)\_Sys-(\d*).out\S*')
     sysnum = splitline.search(name)
     moname = sysnum.group(1)
     moout = moname + '.out'
@@ -37,12 +37,13 @@ for eachline in out_file_unit:
     for line in outfile:
         if line[3:21] == 'Number of symmetry':
             natom = int(line.split(':')[1])
+#        if line[1:27] == 'Two-electron contributions':
         if line[1:11] == 'Atom  Name':
             find_start = 1
             continue
         
         if find_start == 1: 
-           if line == '\n':
+           if line == '\n' or line[1:11] == 'Atom  Name':
                continue
            else:
                force_get = force_get + 1
